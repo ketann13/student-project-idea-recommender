@@ -10,10 +10,12 @@ def clean_text(text):
     """Clean and normalize text for better matching."""
     if not isinstance(text, str):
         return ""
+    if text.strip() == "":
+        return ""
     # Convert to lowercase
     text = text.lower()
-    # Remove special characters but keep spaces
-    text = re.sub(r'[^a-z0-9\s]', ' ', text)
+    # Keep alphanumeric, spaces, and hyphens (important for tech terms like "next-gen", "AI-powered")
+    text = re.sub(r'[^a-z0-9\s\-]', ' ', text)
     # Remove extra whitespace
     text = ' '.join(text.split())
     return text
@@ -36,12 +38,18 @@ def load_and_prepare_data(csv_file):
 
     # Create combined text with weighted importance (title gets more weight)
     df["combined_text"] = (
-        clean_text(df["title"]) + " " + clean_text(df["title"]) + " " +  # Title appears twice for more weight
-        clean_text(df["description"]) + " " +
-        clean_text(df["skills_required"]) + " " +
-        clean_text(df["goal"]) + " " +
-        clean_text(df["domain"])
+        df["title"].astype(str) + " " + 
+        df["title"].astype(str) + " " +  # Title appears twice for more weight
+        df["description"].astype(str) + " " +
+        df["skills_required"].astype(str) + " " +
+        df["goal"].astype(str) + " " +
+        df["domain"].astype(str)
     )
+    
+    # Ensure no empty strings in combined_text
+    df["combined_text"] = df["combined_text"].str.strip()
+    df["combined_text"] = df["combined_text"].replace("", "unknown project data science")
+    
     return df
 
 
@@ -50,14 +58,21 @@ def load_and_prepare_data(csv_file):
 # -----------------------------
 def build_vectorizer(df):
     """Build TF-IDF vectorizer with improved parameters."""
+    # Check if combined_text has content
+    if df["combined_text"].str.len().sum() == 0:
+        raise ValueError("Combined text column is empty. Check your CSV data.")
+    
     vectorizer = TfidfVectorizer(
         stop_words='english',
         max_features=5000,
         ngram_range=(1, 2),  # Include bigrams for better context
         min_df=1,
-        max_df=0.8
+        max_df=1.0,  # Changed from 0.8 to allow more common terms
+        token_pattern=r'\b\w+\b',  # More lenient token pattern
+        lowercase=True
     )
     X = vectorizer.fit_transform(df["combined_text"])
+    
     return vectorizer, X
 
 
