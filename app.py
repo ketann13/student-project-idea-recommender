@@ -21,9 +21,14 @@ BASE_DIR = Path(__file__).parent
 # -----------------------------
 def call_cerabus_api(endpoint, payload=None, method="POST"):
     if not CERABUS_API_KEY:
-        st.warning("Cerabus API key not set. Add CERABUS_API_KEY to your .env file to enable AI features.")
+        st.info("💡 To get AI-generated project ideas, add your CERABUS_API_KEY to Streamlit secrets.")
         return None
+    
+    # TODO: Update with correct Cerabus API endpoint
+    # Current placeholder: https://api.cerabus.com/v1/generate
+    # If using Cerebras or another provider, update the URL below
     url = endpoint if endpoint.startswith("http") else f"https://api.cerabus.com/{endpoint.lstrip('/')}"
+    
     headers = {
         "Authorization": f"Bearer {CERABUS_API_KEY}",
         "Content-Type": "application/json"
@@ -32,8 +37,14 @@ def call_cerabus_api(endpoint, payload=None, method="POST"):
         response = requests.post(url, json=payload, headers=headers, timeout=20)
         response.raise_for_status()
         return response.json()
+    except requests.exceptions.ConnectionError as e:
+        st.warning("⚠️ AI generation unavailable: Cannot connect to Cerabus API. Please verify the API endpoint URL or use local recommendations only.")
+        return None
+    except requests.exceptions.HTTPError as e:
+        st.error(f"🔴 Cerabus API error: {e.response.status_code} - {e.response.text}")
+        return None
     except Exception as e:
-        st.error(f"Cerabus API call failed: {e}")
+        st.error(f"🔴 Unexpected error calling Cerabus API: {str(e)[:200]}")
         return None
 
 # -----------------------------
