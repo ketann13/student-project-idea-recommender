@@ -5,12 +5,16 @@ from dotenv import load_dotenv
 from model import load_and_prepare_data, build_vectorizer, recommend_local
 import requests
 from io import StringIO
+from pathlib import Path
 
 # -----------------------------
 # ENV SETUP
 # -----------------------------
 load_dotenv()
 CERABUS_API_KEY = os.getenv("CERABUS_API_KEY")
+
+# Get the directory where this script is located
+BASE_DIR = Path(__file__).parent
 
 # -----------------------------
 # CERABUS API CALL FUNCTION
@@ -43,8 +47,16 @@ st.write("Get project ideas from a mix of local dataset similarity and AI genera
 # -----------------------------
 # Load Dataset + Model
 # -----------------------------
-DATA_PATH = "project_ideas_dataset_1000.csv"
-df = load_and_prepare_data(DATA_PATH)
+# Try multiple possible paths for the CSV file
+DATA_PATH = BASE_DIR / "data" / "project_ideas_dataset_1000.csv"
+if not DATA_PATH.exists():
+    # Fallback to root directory
+    DATA_PATH = BASE_DIR / "project_ideas_dataset_1000.csv"
+if not DATA_PATH.exists():
+    st.error(f"❌ Dataset file not found. Please ensure 'project_ideas_dataset_1000.csv' is in the 'data/' folder or root directory.")
+    st.stop()
+
+df = load_and_prepare_data(str(DATA_PATH))
 vectorizer, X = build_vectorizer(df)
 
 # Initialize session state for favorites
