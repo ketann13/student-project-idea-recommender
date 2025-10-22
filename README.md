@@ -2,7 +2,7 @@
 
 A hybrid recommendation system that combines **TF-IDF similarity** with **AI-powered generation** using the **Cerebras Inference API** to help students discover relevant project ideas.
 
-[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://your-app-name.streamlit.app)
+[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://project-idea-recommender.streamlit.app/)
 [![GitHub Stars](https://img.shields.io/github/stars/ketann13/student-project-idea-recommender?style=social)](https://github.com/ketann13/student-project-idea-recommender)
 
 ## ✨ Features
@@ -49,7 +49,7 @@ The app will open in your browser at `http://localhost:8501`
 
 ## 🌐 Live Demo
 
-Visit the live app: **[Student Project Idea Recommender](https://your-app-name.streamlit.app)**
+Visit the live app: **[Student Project Idea Recommender](https://project-idea-recommender.streamlit.app/)**
 
 ## 📁 Project Structure
 
