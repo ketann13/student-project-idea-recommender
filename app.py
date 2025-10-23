@@ -80,10 +80,10 @@ def call_cerebras_api(prompt, max_tokens=1000):
 # -----------------------------
 # STREAMLIT PAGE SETUP
 # -----------------------------
-st.set_page_config(page_title="AI Project Recommender", page_icon="🤖", layout="wide")
+st.set_page_config(page_title="Student Project Recommender", page_icon="🤖", layout="wide")
 
-st.title("🤖 AI Project Idea Recommender")
-st.write("Get project ideas from a mix of local dataset similarity and AI generation using the Cerebras Inference API.") 
+st.title("🤖 Student Project Idea Recommender")
+st.write("Get project ideas from a mix of local dataset similarity and AI generation using the Cerebras Inference API.")
 
 # -----------------------------
 # Load Dataset + Model
