@@ -82,8 +82,8 @@ def call_cerebras_api(prompt, max_tokens=1000):
 # -----------------------------
 st.set_page_config(page_title="AI Project Recommender", page_icon="🤖", layout="wide")
 
-st.title("🤖 AI Project Idea Recommender (Hybrid: TF-IDF + Cerebras)")
-st.write("Get project ideas from a mix of local dataset similarity and AI generation using the Cerebras Inference API.")
+st.title("🤖 AI Project Idea Recommender")
+st.write("Get project ideas from a mix of local dataset similarity and AI generation using the Cerebras Inference API.") 
 
 # -----------------------------
 # Load Dataset + Model
@@ -200,7 +200,7 @@ Format each project clearly with markdown headers."""
                 ai_response = call_cerebras_api(prompt, max_tokens=1000)
                 
                 if ai_response:
-                    st.subheader("🚀 AI-Generated Project Ideas (Cerebras)")
+                    st.subheader("Project Ideas")
                     st.markdown(ai_response)
                     
         elif use_cerabus and not CERABUS_API_KEY:
